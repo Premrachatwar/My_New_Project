@@ -77,14 +77,6 @@ pipeline {
                     }
                 }
             }
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        sh "docker push premrachatwar/adservice:latest "
-                    }
-                }
-            }
             stage('Docker Image Scan: trivy '){
          when { expression {  params.action == 'create' } }
             steps{
@@ -94,6 +86,14 @@ pipeline {
                }
             }
         }
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                        sh "docker push premrachatwar/adservice:latest "
+                    }
+                }
+            }
             stage('Docker Image Cleanup : DockerHub '){
          when { expression {  params.action == 'create' } }
             steps{
